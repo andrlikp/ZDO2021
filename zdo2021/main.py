@@ -9,4 +9,3 @@ class VarroaDetector():
     def predict(self, data):
         output = np.zeros_like(data)
         return output
-    bububu
