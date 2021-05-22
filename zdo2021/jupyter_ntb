@@ -1,0 +1,28 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+cap = cv2.imread('varoazy_mensi.jpg')
+
+hsv = cv2.cvtColor(cap, cv2.COLOR_RGB2HSV)
+
+lower_color = np.array([30,60,10])
+upper_color = np.array([200,255,80])
+#upper_color = np.array([255,255,255])
+
+kernel = np.ones((5,5),np.uint8)
+
+mask = cv2.inRange(hsv, lower_color, upper_color)
+
+mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+
+#kernel = np.ones((12,12),np.uint8)
+#mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+
+#kernel = np.ones((5,5),np.uint8)
+#mask = cv2.dilate(mask,kernel,iterations = 1)
+
+res = cv2.bitwise_and(cap, cap, mask=mask)
+
+plt.imshow(mask)
