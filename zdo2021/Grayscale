@@ -1,0 +1,22 @@
+import scipy
+import skimage
+import skimage.io
+import skimage.morphology
+import matplotlib.pyplot as plt
+from skimage.morphology import square
+import cv2
+
+URL = 'D:\\ZČU\\ZDO\\Varroaza\\images\\Original_600_image.jpg'
+imrgb = skimage.io.imread(URL)
+img = cv2.cvtColor(imrgb, cv2.COLOR_BGR2GRAY)
+plt.figure(figsize=[6.4,4.8])
+plt.imshow(img, cmap="gray")
+plt.savefig("CB.jpg")
+
+image = img < 100
+plt.imshow(image)
+skimage.io.imsave("LUL.jpg", image)
+
+otevreni = scipy.ndimage.morphology.binary_opening(image,iterations=3)
+plt.imshow(otevreni)
+skimage.io.imsave("LUL.jpg", otevreni)
