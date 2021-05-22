@@ -1,0 +1,55 @@
+import scipy
+import skimage
+import skimage.io
+import skimage.morphology
+import matplotlib.pyplot as plt
+import cv2
+from skimage.filters import threshold_otsu, threshold_local
+import numpy as np
+from skimage import morphology
+import skimage.measure
+
+# URL = "varoazy_mensi.jpg"
+URL = 'D:\\ZČU\\ZDO\\Varroaza\\images\\Original_600_image.jpg'
+imrgb = skimage.io.imread(URL)
+img = cv2.cvtColor(imrgb, cv2.COLOR_BGR2GRAY)
+plt.imshow(img, cmap="gray")
+
+lower_color = np.array([20,0,0])
+upper_color = np.array([80,60,60])
+#upper_color = np.array([255,255,255])
+kernel = np.ones((3,3),np.uint8)
+mask = cv2.inRange(imrgb, lower_color, upper_color)
+mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+
+plt.imshow(mask)
+skimage.io.imsave("mask.jpg", mask)
+
+block_size = 5
+binary_adaptive = threshold_local(img, block_size, offset=0)
+# val, otsu = threshold_otsu(binary_adaptive)
+image = binary_adaptive < 70
+plt.imshow(image, cmap = "gray")
+skimage.io.imsave("gray.jpg", image)
+
+otevreni = scipy.ndimage.morphology.binary_opening(image,iterations=1)
+otevreni = otevreni.astype(int)
+mask = mask.clip(max=1)
+plt.imshow(otevreni)
+
+kombi = np.multiply(mask, otevreni)
+plt.imshow(kombi)
+skimage.io.imsave("LUL.jpg", kombi)
+
+all_labels = morphology.label(kombi)
+props = skimage.measure.regionprops(all_labels)
+plt.imshow(all_labels)
+
+Klestici = []
+for i in range(len(props)):
+    if props[i].area > 200 and props[i].area < 360:
+        Klestici.append(props[i].area)
+
+len(Klestici)
+
