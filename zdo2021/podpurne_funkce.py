@@ -59,5 +59,37 @@ def najdi_brouka(imrgb)
     # return maska 
     return
 
-def pavel_fce():
-  return
+def pavel_detector(img_rgb):
+
+    counter = 0
+    #img_rgb = cv2.imread('ZDO_data\\images\\Original_608_image.jpg', cv2.IMREAD_COLOR)
+    img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+    #img = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2BGR)
+    h_img, w_img = img_gray.shape[::]
+    mask = np.zeros((h_img,w_img))
+    for name in os.listdir('ZDO_data\\templates'):
+        #if counter%10==0:
+        #    print(counter)
+
+        template = cv2.imread('ZDO_data\\templates\\'+name,0)
+        h, w = template.shape[::]
+
+        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        #plt.imshow(res, cmap='gray')
+
+        threshold = 0.8 #Pick only values above 0.8. For TM_CCOEFF_NORMED, larger values = good fit.
+
+        loc = np.where( res >= threshold)  
+        #Outputs 2 arrays. Combine these arrays to get x,y coordinates - take x from one array and y from the other.
+
+        #Reminder: ZIP function is an iterator of tuples where first item in each iterator is paired together,
+        #then the second item and then third, etc. 
+
+        for pt in zip(*loc[::-1]):   #-1 to swap the values as we assign x and y coordinate to draw the rectangle. 
+            #Draw rectangle around each object. We know the top left (pt), draw rectangle to match the size of the template image.
+            #cv2.rectangle(img, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)  #Red rectangles with thickness 2. 
+            mask[pt[1]:pt[1]+w, pt[0]:pt[0]+h]=1
+            
+        counter +=1
+    #cv2.imwrite('ZDO_data\\result.jpg', img)
+    return mask
