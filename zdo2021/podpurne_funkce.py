@@ -1,6 +1,6 @@
 def najdi_brouka(imrgb)
 #     URL = 'D:\\ZČU\\ZDO\\Varroaza\\images\\Original_608_image.jpg'
-    imrgb = skimage.io.imread(URL)
+    #imrgb = skimage.io.imread(URL)
     img = cv2.cvtColor(imrgb, cv2.COLOR_BGR2GRAY)
     plt.imshow(imrgb, cmap="gray")
     
