@@ -7,5 +7,7 @@ class VarroaDetector():
         pass
 
     def predict(self, img):
-        output = np.multiply(pavel_detector(img), najdi_brouka(img))
+        mask1 = pavel_detector(img)
+        mask2 = najdi_brouka(img)
+        output = np.multiply(mask1, mask2)
         return output
