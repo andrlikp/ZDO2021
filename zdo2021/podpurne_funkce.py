@@ -1,4 +1,16 @@
 def najdi_brouka(image):
+    import scipy
+    import skimage
+    import skimage.io
+    import skimage.morphology
+    import matplotlib.pyplot as plt
+    import cv2
+    from skimage.filters import threshold_otsu, threshold_local, threshold_multiotsu
+    import numpy as np
+    from skimage import morphology
+    import skimage.measure
+    import copy
+    
 #     URL = 'D:\\ZČU\\ZDO\\Varroaza\\images\\Original_616_image.jpg'
 #     imrgb = skimage.io.imread(URL)
 
@@ -76,7 +88,12 @@ def najdi_brouka(image):
     return maska
 
 def pavel_detector(img_rgb):
-
+    import os
+    import cv2
+    import numpy as np
+    from matplotlib import pyplot as plt
+    import skimage.io
+    
     counter = 0
     #img_rgb = cv2.imread('ZDO_data\\images\\Original_608_image.jpg', cv2.IMREAD_COLOR)
     img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
